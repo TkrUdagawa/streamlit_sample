@@ -1,12 +1,6 @@
 import streamlit as st
-import numpy as np
 import pandas as pd
 
-from sklearn.datasets import load_iris
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.manifold import TSNE
 
 import plotly.express as px
@@ -15,10 +9,11 @@ from algorithms import algorithms
 
 st.title("Clustering apps")
 st.text(
-"""
-CSVファイルをアップロードしてください。
-"""
+    """
+    CSVファイルをアップロードしてください。
+    """
 )
+
 uploaded_file = st.file_uploader("Choose a file")
 df = None
 if uploaded_file is not None:
@@ -59,7 +54,7 @@ if algorithm_submit is not None:
             param_submitted = st.form_submit_button("決定")
 
 if param_submitted is not None:
-    clu = algorithm_dict[algorithm].make_instance(**parameters)
+    clu = algorithm_dict[algorithm](**parameters)
 
 if df is not None and clu is not None:
     st.write(f"""
@@ -70,5 +65,5 @@ if df is not None and clu is not None:
         res = [str(r) for r in clu.fit_predict(df)]
         tsne = TSNE(n_components=2)
         coor = tsne.fit_transform(df)
-        fig = px.scatter(coor, color=res, hover_name=res)    
+        fig = px.scatter(coor, color=res, hover_name=res)
         st.plotly_chart(fig)
